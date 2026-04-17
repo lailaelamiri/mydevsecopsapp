@@ -13,6 +13,9 @@ def get_user_input():
 def greet(name):
     print(f"Hello, {name}!")
 
+
 AWS_SECRET_KEY = "AKIAIOSFODNN7EXAMPLE1234secretkey"
+
+
 if __name__ == "__main__":
     greet("World")
