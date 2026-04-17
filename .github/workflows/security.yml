@@ -17,7 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0        # ← needed so Gitleaks can scan full history
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -32,13 +32,36 @@ jobs:
 
       - name: Run SAST scan (Bandit)
         run: bandit -r app.py -ll
+
       - name: Run Gitleaks
         run: |
-          # Download Gitleaks binary directly
           wget -q https://github.com/gitleaks/gitleaks/releases/download/v8.18.4/gitleaks_8.18.4_linux_x64.tar.gz
           tar -xzf gitleaks_8.18.4_linux_x64.tar.gz
           chmod +x gitleaks
-
-          # Scan entire working directory (not just last commit)
           ./gitleaks detect --source=. --verbose --no-git || exit 1
-        
+
+      - name: Build Docker image
+        run: docker build -t myapp:${{ github.sha }} .
+
+      - name: Trivy — CVE scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: myapp:${{ github.sha }}
+          format: sarif
+          output: trivy-cve.sarif
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+
+      - name: Trivy — Dockerfile misconfig scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: config
+          scan-ref: .
+          format: table
+          exit-code: 1
+
+      - name: Upload Trivy SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-cve.sarif
+        if: always()
