@@ -1,7 +1,6 @@
 import subprocess
 import os
 
-AWS_SECRET_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 
 SECRET_PASSWORD = os.environ.get("APP_PASSWORD")
 
