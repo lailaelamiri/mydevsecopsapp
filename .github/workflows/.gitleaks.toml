@@ -2,4 +2,4 @@
 useDefault = true
 
 [allowlist]
-description = "global allow list"
+  paths = ["README.md"]
