@@ -1,12 +1,13 @@
 import subprocess
+import os
 
 
-SECRET_PASSWORD = "admin123"
+SECRET_PASSWORD = os.environ.get("APP_PASSWORD")
 
 
 def get_user_input():
     user_input = input("Enter command: ")
-    subprocess.call(user_input, shell=True)
+    subprocess.call(user_input.split(), shell=False)
 
 
 def greet(name):
