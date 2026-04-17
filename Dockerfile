@@ -21,5 +21,6 @@ USER appuser
 # Explicit port (documentation + firewall rules)
 EXPOSE 5000
 
+HEALTHCHECK CMD curl --fail http://localhost:5000 || exit 1
 # Use exec form (not shell form) — avoids shell injection
 CMD ["python", "app.py"]
