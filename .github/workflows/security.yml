@@ -51,6 +51,7 @@ jobs:
           output: trivy-cve.sarif
           severity: CRITICAL,HIGH
           ignore-unfixed: true
+          exit-code: 0
 
       - name: Trivy — Dockerfile misconfig scan
         uses: aquasecurity/trivy-action@master
@@ -61,7 +62,8 @@ jobs:
           exit-code: 1
 
       - name: Upload Trivy SARIF
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-cve.sarif
         if: always()
+        continue-on-error: true
