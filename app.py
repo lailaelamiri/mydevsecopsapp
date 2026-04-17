@@ -1,6 +1,8 @@
 import subprocess
 import os
 
+AWS_SECRET_KEY = "AKIAIOSFODNN7EXAMPLE1234secretkey"
+
 
 SECRET_PASSWORD = os.environ.get("APP_PASSWORD")
 
@@ -12,9 +14,6 @@ def get_user_input():
 
 def greet(name):
     print(f"Hello, {name}!")
-
-
-AWS_SECRET_KEY = "AKIAIOSFODNN7EXAMPLE1234secretkey"
 
 
 if __name__ == "__main__":
