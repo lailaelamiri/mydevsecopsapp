@@ -1,10 +1,8 @@
 - macro: spawned_process
-  condition: evt.type = execve and evt.dir = 
+  condition: evt.type = execve
 
 - macro: outbound
-  condition: >
-    evt.type = connect and evt.dir = 
-    and fd.typechar = 4
+  condition: evt.type = connect and fd.typechar = 4
 
 - rule: Shell in Container
   desc: Detect shell spawned in a container
