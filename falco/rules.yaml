@@ -1,0 +1,32 @@
+- rule: Shell in Container
+  desc: Detect shell spawned in a container
+  condition: >
+    spawned_process and container
+    and proc.name in (bash, sh, zsh)
+  output: >
+    Shell spawned in container
+    (user=%user.name container=%container.name
+    proc=%proc.name)
+  priority: WARNING
+
+- rule: Sensitive File Read
+  desc: Detect reading of sensitive files
+  condition: >
+    open_read and container
+    and fd.name in (/etc/passwd, /etc/shadow)
+  output: >
+    Sensitive file read in container
+    (user=%user.name file=%fd.name
+    container=%container.name)
+  priority: CRITICAL
+
+- rule: Outbound Network from Container
+  desc: Detect unexpected outbound connections
+  condition: >
+    outbound and container
+    and not proc.name in (curl, wget)
+  output: >
+    Unexpected outbound connection
+    (proc=%proc.name container=%container.name
+    dest=%fd.rip)
+  priority: WARNING

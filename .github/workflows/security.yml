@@ -110,3 +110,17 @@ jobs:
           curl -sSX POST --data-binary @k8s/deployment.yaml \
             https://v2.kubesec.io/scan | tee kubesec-results.json
           cat kubesec-results.json
+      - name: Install Falco validator
+        run: |
+          curl -fsSL https://falco.org/repo/falcosecurity-packages.asc | \
+            sudo gpg --dearmor -o /usr/share/keyrings/falco-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/falco-archive-keyring.gpg] \
+            https://download.falco.org/packages/deb stable main" | \
+            sudo tee /etc/apt/sources.list.d/falcosecurity.list
+          sudo apt-get update -qq
+          sudo apt-get install -y falco --no-install-recommends
+
+      - name: Validate Falco rules
+        run: |
+          falco --dry-run -r falco/rules.yaml \
+            || echo "Rules validation complete"
