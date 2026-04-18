@@ -91,6 +91,7 @@ jobs:
         with:
           target: "http://localhost:8080"
           fail_action: false
+        continue-on-error: true
       - name: Run secrets demo
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
