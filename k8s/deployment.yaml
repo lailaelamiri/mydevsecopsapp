@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: myapp
+  namespace: myapp-namespace        # Fix KSV-0110: not default namespace
 spec:
   replicas: 1
   selector:
@@ -12,14 +13,18 @@ spec:
       labels:
         app: myapp
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault       # Fix KSV-0030, KSV-0104, KSV-0118
       containers:
       - name: myapp
-        image: myapp:latest
+        image: myapp:v1.0.0          # Fix KSV-0013: no :latest
         ports:
         - containerPort: 8080
         securityContext:
           runAsNonRoot: true
-          runAsUser: 1000
+          runAsUser: 10001           # Fix KSV-0020: must be > 10000
+          runAsGroup: 10001          # Fix KSV-0021: must be > 10000
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           capabilities:
@@ -29,3 +34,6 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
+          requests:
+            memory: "64Mi"           # Fix KSV-0016
+            cpu: "250m"              # Fix KSV-0015
