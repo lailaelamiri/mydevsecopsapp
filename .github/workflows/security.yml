@@ -91,3 +91,8 @@ jobs:
         with:
           target: "http://localhost:8080"
           fail_action: false
+      - name: Run secrets demo
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          API_KEY: ${{ secrets.API_KEY }}
+        run: python secrets_demo.py
