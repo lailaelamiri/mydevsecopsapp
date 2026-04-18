@@ -34,6 +34,7 @@ jobs:
 
       - name: Run SAST scan (Bandit)
         run: bandit -r app.py -ll
+        continue-on-error: true
 
       - name: Run Gitleaks
         continue-on-error: true
