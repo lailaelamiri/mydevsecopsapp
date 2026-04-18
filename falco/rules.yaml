@@ -1,6 +1,12 @@
 - macro: spawned_process
   condition: evt.type = execve
 
+- macro: container
+  condition: container.id != host
+
+- macro: open_read
+  condition: evt.type = open and evt.is_open_read = true
+
 - macro: outbound
   condition: evt.type = connect and fd.typechar = 4
 
