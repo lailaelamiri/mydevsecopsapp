@@ -32,11 +32,17 @@ resource "aws_s3_bucket_logging" "my_bucket" {
 }
 
 # Fix: enable encryption with KMS
+resource "aws_kms_key" "s3_key" {
+  description             = "KMS key for S3 bucket encryption"
+  deletion_window_in_days = 10
+}
+
 resource "aws_s3_bucket_server_side_encryption_configuration" "my_bucket" {
   bucket = aws_s3_bucket.my_bucket.id
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "aws:kms"
+      sse_algorithm     = "aws:kms"
+      kms_master_key_id = aws_kms_key.s3_key.arn  # ← explicit key
     }
   }
 }
