@@ -7,7 +7,6 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b"<h1>Hello DevSecOps!</h1>")
 
-
     def log_message(self, format, *args):
         pass  # silence logs
 
