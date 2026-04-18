@@ -97,3 +97,16 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           API_KEY: ${{ secrets.API_KEY }}
         run: python secrets_demo.py
+      - name: Trivy — Kubernetes misconfig scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: config
+          scan-ref: k8s/
+          format: table
+          exit-code: 0
+
+      - name: Kubesec scan
+        run: |
+          curl -sSX POST --data-binary @k8s/deployment.yaml \
+            https://v2.kubesec.io/scan | tee kubesec-results.json
+          cat kubesec-results.json
