@@ -1,18 +1,13 @@
-import subprocess
-import os
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"<h1>Hello DevSecOps!</h1>")
 
-SECRET_PASSWORD = os.environ.get("APP_PASSWORD")
-
-
-def get_user_input():
-    user_input = input("Enter command: ")
-    subprocess.call(user_input.split(), shell=False)
-
-
-def greet(name):
-    print(f"Hello, {name}!")
-
+    def log_message(self, format, *args):
+        pass  # silence logs
 
 if __name__ == "__main__":
-    greet("Worlds")
+    HTTPServer(("0.0.0.0", 8080), Handler).serve_forever()
