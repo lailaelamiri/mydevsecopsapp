@@ -1,3 +1,11 @@
+- macro: spawned_process
+  condition: evt.type = execve and evt.dir = 
+
+- macro: outbound
+  condition: >
+    evt.type = connect and evt.dir = 
+    and fd.typechar = 4
+
 - rule: Shell in Container
   desc: Detect shell spawned in a container
   condition: >
@@ -27,6 +35,5 @@
     and not proc.name in (curl, wget)
   output: >
     Unexpected outbound connection
-    (proc=%proc.name container=%container.name
-    dest=%fd.rip)
+    (proc=%proc.name container=%container.name)
   priority: WARNING
